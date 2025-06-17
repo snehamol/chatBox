@@ -2,17 +2,18 @@
   "name": "chatbot-app",
   "version": "1.0.0",
   "description": "",
-  
   "main": "index.js",
   "scripts": {
-   "client": "npm start --prefix frontend",
-    "server": "npm run dev --prefix backend",
+    "server": "cd backend && nodemon server.js",
+    "client": "cd frontend && npm start",
+    "build": "cd frontend && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10"
   }
 }
