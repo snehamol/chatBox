@@ -7,12 +7,15 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [inputHistory, setInputHistory] = useState([]); // ✅ input history
+  const [historyIndex, setHistoryIndex] = useState(-1); // ✅ history index
+
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(); 
-    navigate("/login"); 
+    logout();
+    navigate("/login");
   };
 
   const promptTemplates = [
@@ -30,6 +33,8 @@ export default function Chat() {
     if (!input.trim()) return;
     const userMessage = { text: input, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
+    setInputHistory((prev) => [...prev, input]); // ✅ Add to history
+    setHistoryIndex(-1); // ✅ Reset index after sending
     setInput("");
     setLoading(true);
 
@@ -47,6 +52,22 @@ export default function Chat() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
+    } else if (e.key === "ArrowUp") {
+      // Navigate input history up
+      e.preventDefault();
+      if (inputHistory.length > 0) {
+        const newIndex = historyIndex === -1 ? inputHistory.length - 1 : Math.max(0, historyIndex - 1);
+        setInput(inputHistory[newIndex]);
+        setHistoryIndex(newIndex);
+      }
+    } else if (e.key === "ArrowDown") {
+      // Navigate input history down
+      e.preventDefault();
+      if (inputHistory.length > 0 && historyIndex !== -1) {
+        const newIndex = Math.min(inputHistory.length - 1, historyIndex + 1);
+        setInput(inputHistory[newIndex] || "");
+        setHistoryIndex(newIndex >= inputHistory.length ? -1 : newIndex);
+      }
     }
   };
 
@@ -78,20 +99,20 @@ export default function Chat() {
           <button
             onClick={exportChat}
             className="px-2 sm:px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm sm:text-base"
-            >
+          >
             <span className="sm:hidden">Export</span>
             <span className="hidden sm:inline">Export</span>
           </button>
           <button
             onClick={handleLogout}
             className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm sm:text-base"
-            >
+          >
             <span className="sm:hidden">Logout</span>
             <span className="hidden sm:inline">Logout</span>
           </button>
         </div>
       </header>
-      
+
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg, index) => (
           <div
