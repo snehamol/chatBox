@@ -7,8 +7,8 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [inputHistory, setInputHistory] = useState([]); // ✅ input history
-  const [historyIndex, setHistoryIndex] = useState(-1); // ✅ history index
+  const [inputHistory, setInputHistory] = useState([]); 
+  const [historyIndex, setHistoryIndex] = useState(-1); 
 
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
@@ -33,8 +33,8 @@ export default function Chat() {
     if (!input.trim()) return;
     const userMessage = { text: input, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
-    setInputHistory((prev) => [...prev, input]); // ✅ Add to history
-    setHistoryIndex(-1); // ✅ Reset index after sending
+    setInputHistory((prev) => [...prev, input]); 
+    setHistoryIndex(-1); 
     setInput("");
     setLoading(true);
 
@@ -53,7 +53,7 @@ export default function Chat() {
       e.preventDefault();
       sendMessage();
     } else if (e.key === "ArrowUp") {
-      // Navigate input history up
+      
       e.preventDefault();
       if (inputHistory.length > 0) {
         const newIndex = historyIndex === -1 ? inputHistory.length - 1 : Math.max(0, historyIndex - 1);
@@ -61,7 +61,7 @@ export default function Chat() {
         setHistoryIndex(newIndex);
       }
     } else if (e.key === "ArrowDown") {
-      // Navigate input history down
+      
       e.preventDefault();
       if (inputHistory.length > 0 && historyIndex !== -1) {
         const newIndex = Math.min(inputHistory.length - 1, historyIndex + 1);
